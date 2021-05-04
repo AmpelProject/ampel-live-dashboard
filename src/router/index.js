@@ -1,14 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "Profile",
+    component: Profile,
   },
   {
     path: "/about",
@@ -36,12 +36,6 @@ const routes = [
     name: "GithubCallback",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/GithubCallback.vue"),
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
   },
 ];
 

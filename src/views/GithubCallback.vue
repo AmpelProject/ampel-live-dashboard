@@ -35,7 +35,7 @@ export default {
           this.$store.state.token_payload = jwt_decode(
             response.data.access_token
           );
-          this.$router.replace("/profile");
+          this.$router.replace("/");
         })
         .catch(() => {
           this.$router.replace("/");
