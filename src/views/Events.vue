@@ -1,7 +1,5 @@
 <template>
   <b-container>
-    <h1>Events</h1>
-
     <div id="events-table">
       <b-table :busy="isLoading" :items="events" :fields="fields">
         <!-- A virtual column -->
@@ -22,6 +20,8 @@
 </template>
 
 <script>
+import humanizeDuration from "humanize-duration";
+import moment from "moment";
 import axios from "axios";
 
 export default {
@@ -33,8 +33,20 @@ export default {
         { key: "run" },
         { key: "process" },
         { key: "tier" },
-        { key: "timestamp", sortable: true, sortDirection: "desc" },
-        { key: "duration" },
+        {
+          key: "timestamp",
+          sortable: true,
+          sortDirection: "desc",
+          formatter: (value) => {
+            return moment(value).fromNow();
+          },
+        },
+        {
+          key: "duration",
+          formatter: (value) => {
+            return humanizeDuration(value * 1000, { round: true });
+          },
+        },
         { key: "successmark", label: "Status" },
       ],
       events: [],
@@ -58,6 +70,11 @@ export default {
           this.isLoading = false;
           console.log(error);
         });
+    },
+    formatDate(value) {
+      if (value) {
+        return moment(String(value)).format("YYYYMMDD");
+      }
     },
   },
 };
