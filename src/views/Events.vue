@@ -77,7 +77,7 @@
             <b-icon icon="check-circle-fill" variant="success"></b-icon>
           </div>
           <div v-else-if="data.item.success == undefined">
-            <b-icon icon="circle-fill" variant="warning"></b-icon>
+            <b-icon icon="question-circle-fill" variant="warning"></b-icon>
           </div>
           <div v-else>
             <b-icon icon="x-square-fill" variant="danger"></b-icon>
