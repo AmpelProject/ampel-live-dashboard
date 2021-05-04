@@ -29,7 +29,7 @@ export default {
       };
 
       axios
-        .post(this.$store.state.BACKEND_URL + "/auth/authorize", data)
+        .post(this.$store.state.BACKEND_AUTH_URL + "/auth/authorize", data)
         .then((response) => {
           this.$store.state.token = response.data;
           this.$store.state.token_payload = jwt_decode(

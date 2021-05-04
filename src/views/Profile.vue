@@ -71,7 +71,7 @@ export default {
     },
     login() {
       axios
-        .get(this.$store.state.BACKEND_URL + "/auth/login")
+        .get(this.$store.state.BACKEND_AUTH_URL + "/auth/login")
         .then((response) => {
           window.location = response.data.url;
         });
