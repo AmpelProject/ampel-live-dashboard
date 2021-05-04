@@ -22,13 +22,15 @@ const routes = [
   {
     path: "/auth/github",
     name: "GithubCallback",
-    component: () => import(/* webpackChunkName: "about" */ '../views/GithubCallback.vue')
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/GithubCallback.vue"),
   },
   {
     path: "/profile",
     name: "Profile",
-    component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue')
-  }
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
+  },
 ];
 
 const router = new VueRouter({
