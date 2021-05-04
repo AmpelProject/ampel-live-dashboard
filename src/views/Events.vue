@@ -12,7 +12,15 @@
             <td>{{ event.process }}</td>
             <td>{{ event.timestamp }}</td>
             <td>{{ event.duration }}</td>
-            <td>{{ event.success }}</td>
+            <td>
+              <div v-if="event.success">
+                <b-icon icon="check" variant="success"></b-icon>
+              </div>
+              <div v-else-if="event.success == undefined">
+                <b-icon icon="dot" variant="warning"></b-icon>
+              </div>
+              <div v-else><b-icon icon="x" variant="danger"></b-icon></div>
+            </td>
           </tr>
         </tbody>
       </table>
