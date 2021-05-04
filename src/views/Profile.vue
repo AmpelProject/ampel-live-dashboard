@@ -5,21 +5,23 @@
       <b-container>
         <b-row>
           <b-col>User: {{ user }}</b-col>
+
+          <countdown :end-time="expire" :speed="10000">
+            <template v-slot:process="anyYouWantedScopName">
+              <b-col>
+                Token expires in:
+                {{ humanize(anyYouWantedScopName.remainingTime) }}
+              </b-col>
+            </template>
+            <template v-slot:finish>
+              <b-col>Token expired!</b-col>
+            </template>
+          </countdown>
+
           <b-col>
-            <countdown :end-time="expire" :speed="10000">
-              <template v-slot:process="anyYouWantedScopName">
-                <span
-                  >Token expires in:
-                  {{ humanize(anyYouWantedScopName.remainingTime) }}</span
-                >
-              </template>
-              <template v-slot:finish>
-                Token expired!
-                <b-button variant="danger" @click="login"
-                  >Refresh token</b-button
-                >
-              </template>
-            </countdown>
+            <b-button variant="success" title="Refresh token" @click="login"
+              ><b-icon-arrow-repeat></b-icon-arrow-repeat
+            ></b-button>
           </b-col>
         </b-row>
         <b-input-group prepend="API token" class="mt-3">
