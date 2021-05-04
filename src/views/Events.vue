@@ -66,6 +66,11 @@
         :fields="fields"
         :filter="filter"
       >
+        <template #cell(run)="data">
+          <router-link :to="`/event/${data.item.run}`">{{
+            data.item.run
+          }}</router-link>
+        </template>
         <!-- A virtual column -->
         <template #cell(successmark)="data">
           <div v-if="data.item.success">
@@ -139,11 +144,6 @@ export default {
           this.isLoading = false;
           console.log(error);
         });
-    },
-    formatDate(value) {
-      if (value) {
-        return moment(String(value)).format("YYYYMMDD");
-      }
     },
   },
 };
