@@ -26,6 +26,38 @@
           </b-input-group>
         </b-form-group>
       </b-col>
+      <!-- <b-col lg="3" class="my-1">
+        <b-form-group
+          label="After"
+          label-for="after-select"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          class="mb-0"
+        >
+          <b-form-input
+            id="after-select"
+            v-model.lazy="after"
+            size="sm"
+          ></b-form-input>
+        </b-form-group>
+      </b-col>
+      <b-col lg="3" class="my-1">
+        <b-form-group
+          label="Before"
+          label-for="before-select"
+          label-cols-sm="3"
+          label-align-sm="right"
+          label-size="sm"
+          class="mb-0"
+        >
+          <b-form-input
+            id="before-select"
+            v-model.lazy="before"
+            size="sm"
+          ></b-form-input>
+        </b-form-group>
+      </b-col> -->
     </b-row>
     <div id="events-table">
       <b-table
@@ -53,13 +85,15 @@
 
 <script>
 import humanizeDuration from "humanize-duration";
-import moment from "moment";
+import moment from "moment-relativism";
 import axios from "axios";
 
 export default {
   name: "Events",
   data() {
     return {
+      before: moment.relativism("now"),
+      after: moment.relativism("now-1d"),
       isLoading: true,
       filter: null,
       filterOn: [],
@@ -93,8 +127,9 @@ export default {
     loadData() {
       this.isLoading = true;
       axios
-        .get(this.$store.state.BACKEND_URL + "/live/events?after=3600", {
+        .get(this.$store.state.BACKEND_URL + "/live/events", {
           headers: { Authorization: "bearer ${this.$store.state.token}" },
+          params: { after: this.after.format(), before: this.before.format() },
         })
         .then((response) => {
           this.events = response.data.events.slice().reverse();
