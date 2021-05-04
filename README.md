@@ -18,6 +18,12 @@ npm run serve
 npm run build
 ```
 
+or
+
+```
+./stage.sh
+```
+
 ### Lints and fixes files
 
 ```
