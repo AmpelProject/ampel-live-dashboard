@@ -1,8 +1,16 @@
 <template>
   <div class="about">
-    <div v-if="!token">Generating token ...</div>
-    <div v-else>
-      {{ token.access_token }}
+    <div v-if="!error">Generating token ...</div>
+    <div v-else-if="error.error">
+      <b-card title="Authorization error" :sub-title="error.error">
+        <b-card-text>
+          {{ error.error_description }}
+        </b-card-text>
+
+        <a v-if="error.error_uri" :href="error.error_uri" class="card-link"
+          >More info</a
+        >
+      </b-card>
     </div>
   </div>
 </template>
@@ -18,18 +26,28 @@ export default {
       return this.$store.state.token;
     },
   },
+  data() {
+    return {
+      error: undefined,
+    };
+  },
   created() {
     this.authorize();
   },
   methods: {
     authorize() {
+      if (this.$route.query.code == undefined) {
+        this.error = this.$route.query;
+        return;
+      }
+      const url = this.$store.state.BACKEND_AUTH_URL + "/auth/authorize";
       const data = {
         state: this.$route.query.state,
         code: this.$route.query.code,
       };
 
       axios
-        .post(this.$store.state.BACKEND_AUTH_URL + "/auth/authorize", data)
+        .post(url, data)
         .then((response) => {
           this.$store.state.token = response.data;
           this.$store.state.token_payload = jwt_decode(
@@ -37,8 +55,11 @@ export default {
           );
           this.$router.replace("/");
         })
-        .catch(() => {
-          this.$router.replace("/");
+        .catch((error) => {
+          this.error = {
+            error: error.name,
+            error_description: url + " " + error.message,
+          };
         });
     },
   },
