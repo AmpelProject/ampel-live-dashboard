@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
-    <b-row>
-      <b-col lg="6" class="my-1">
+    <b-row class="my-2">
+      <b-col>
         <b-form-group
           label="Filter"
           label-for="filter-input"
@@ -13,7 +13,7 @@
           <b-input-group size="sm">
             <b-form-input
               id="filter-input"
-              v-model="filter"
+              v-model.lazy="filter"
               type="search"
               placeholder="Type to Search"
             ></b-form-input>
@@ -59,6 +59,8 @@
         </b-form-group>
       </b-col> -->
     </b-row>
+    <b-row>
+      <b-col>
     <div id="events-table">
       <b-table
         :busy="isLoading"
@@ -85,6 +87,8 @@
         </template>
       </b-table>
     </div>
+    </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -104,7 +108,7 @@ export default {
       filterOn: [],
       fields: [
         { key: "run" },
-        { key: "process" },
+        { key: "process", tdClass: "text-left" },
         { key: "tier" },
         {
           key: "timestamp",
