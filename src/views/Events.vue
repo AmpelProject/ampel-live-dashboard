@@ -61,33 +61,33 @@
     </b-row>
     <b-row>
       <b-col>
-    <div id="events-table">
-      <b-table
-        :busy="isLoading"
-        :items="events"
-        :fields="fields"
-        :filter="filter"
-      >
-        <template #cell(run)="data">
-          <router-link :to="`/event/${data.item.run}`">{{
-            data.item.run
-          }}</router-link>
-        </template>
-        <!-- A virtual column -->
-        <template #cell(successmark)="data">
-          <div v-if="data.item.success">
-            <b-icon icon="check-circle-fill" variant="success"></b-icon>
-          </div>
-          <div v-else-if="data.item.success == undefined">
-            <b-icon icon="question-circle-fill" variant="warning"></b-icon>
-          </div>
-          <div v-else>
-            <b-icon icon="x-square-fill" variant="danger"></b-icon>
-          </div>
-        </template>
-      </b-table>
-    </div>
-    </b-col>
+        <div id="events-table">
+          <b-table
+            :busy="isLoading"
+            :items="events"
+            :fields="fields"
+            :filter="filter"
+          >
+            <template #cell(run)="data">
+              <router-link :to="`/event/${data.item.run}`">{{
+                data.item.run
+              }}</router-link>
+            </template>
+            <!-- A virtual column -->
+            <template #cell(successmark)="data">
+              <div v-if="data.item.success">
+                <b-icon icon="check-circle-fill" variant="success"></b-icon>
+              </div>
+              <div v-else-if="data.item.success == undefined">
+                <b-icon icon="question-circle-fill" variant="warning"></b-icon>
+              </div>
+              <div v-else>
+                <b-icon icon="x-square-fill" variant="danger"></b-icon>
+              </div>
+            </template>
+          </b-table>
+        </div>
+      </b-col>
     </b-row>
   </b-container>
 </template>

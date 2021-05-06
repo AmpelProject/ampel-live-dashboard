@@ -22,12 +22,16 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.3.1",
     "eslint": "^6.7.2",
@@ -38,6 +42,7 @@
     "prettier": "^2.2.1",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
+    "typescript": "~4.1.5",
     "vue-cli-plugin-bootstrap": "~0.4.0",
     "vue-template-compiler": "^2.6.11"
   },
@@ -49,10 +54,11 @@
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",
-      "@vue/prettier"
+      "@vue/prettier",
+      "@vue/typescript"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {}
   },
