@@ -1,8 +1,17 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/events">Events</router-link>
+      <b-navbar type="light" variant="light">
+          <b-navbar-brand href="/">
+            <img
+              src="https://placekitten.com/g/30/30"
+              class="d-inline-block align-top"
+              alt="Kitten"
+            />
+            Ampel
+          </b-navbar-brand>
+        <b-nav-item to="/events">Events</b-nav-item>
+      </b-navbar>
     </div>
     <router-view />
   </div>
@@ -14,11 +23,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
-  color: #2c3e50;
+  /* color: #2c3e50; */
 }
 
 #nav {
-  padding: 30px;
+  /* padding: 30px; */
 }
 
 #nav a {
