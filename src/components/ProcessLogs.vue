@@ -4,14 +4,17 @@
       <b-col>
         <b-pagination
           id="page-input"
-          align="right"
+          align="left"
           v-model="currentPage"
           :totalRows="totalRows"
           :per-page="perPage"
         ></b-pagination>
-      </b-col>
-      <b-col>
-        <b-button v-b-toggle.filter-panel variant="primary">
+        <b-button
+          v-b-toggle.filter-panel
+          variant="primary"
+          size="sm"
+          class="filter-toggle"
+        >
           <b-icon-filter></b-icon-filter>
         </b-button>
         <b-sidebar id="filter-panel" title="Filter logs">
@@ -171,7 +174,10 @@ export default {
       console.log(this.run_id);
       axios
         .get(
-          this.$store.state.BACKEND_URL + "/live/events/" + this.run_id + "/logs",
+          this.$store.state.BACKEND_URL +
+            "/live/events/" +
+            this.run_id +
+            "/logs",
           {
             headers: { Authorization: "bearer ${this.$store.state.token}" },
             params: {
@@ -230,3 +236,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+button.filter-toggle {
+  float: right;
+}
+ul.b-pagination {
+  float: left;
+}
+</style>
