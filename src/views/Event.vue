@@ -1,10 +1,8 @@
 <template>
   <b-container>
-    <b-form-row>
-      <b-col>
-        <h3>Run {{ $route.params.id }}</h3>
-      </b-col>
+    <h3>Run {{ $route.params.id }}</h3>
 
+    <b-form-row>
       <b-col>
         <b-pagination
           id="page-input"
@@ -118,8 +116,8 @@ export default {
   data() {
     return {
       fields: [
-        "timestamp",
-        "location",
+        { key: "timestamp", label: "Time", formatter: this.formatDate },
+        { key: "location", label: "Where" },
         "level",
         { key: "message", tdClass: "text-left" },
       ],
@@ -214,6 +212,17 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    formatDate(value: string): string {
+      return Intl.DateTimeFormat(navigator.language, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+      }).format(new Date(value));
     },
   },
 };
