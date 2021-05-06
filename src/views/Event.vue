@@ -1,53 +1,10 @@
 <template>
   <b-container>
-    <b-row>
+    <b-form-row>
       <b-col>
         <h3>Run {{ $route.params.id }}</h3>
       </b-col>
-      <b-col>
-        <b-form-group
-          label="Filter"
-          label-for="filter-input"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-input
-              id="filter-input"
-              v-model="filter"
-              debounce="200"
-              type="search"
-              placeholder="Type to Search"
-            ></b-form-input>
 
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''"
-                >Clear</b-button
-              >
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
-      <b-col>
-        <b-form-group
-          label="Items"
-          label-for="per-page-input"
-          label-cols-sm="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
-          <b-input-group size="sm">
-            <b-form-select
-              id="per-page-input"
-              v-model="perPage"
-              :options="perPageOptions"
-            ></b-form-select>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
       <b-col>
         <b-pagination
           id="page-input"
@@ -57,7 +14,84 @@
           :per-page="perPage"
         ></b-pagination>
       </b-col>
-    </b-row>
+      <b-col>
+        <b-button v-b-toggle.filter-panel variant="primary">
+          <b-icon-filter></b-icon-filter>
+        </b-button>
+        <b-sidebar id="filter-panel" title="Filter logs">
+          <b-container>
+            <b-form-row>
+              <b-col>
+                <b-form-group
+                  label="Message"
+                  label-for="filter-input"
+                  label-cols-sm="3"
+                  label-align-sm="right"
+                  label-size="sm"
+                  class="mb-0"
+                >
+                  <b-input-group size="sm">
+                    <b-form-input
+                      id="filter-input"
+                      v-model="filter.message"
+                      debounce="200"
+                      type="search"
+                      placeholder="Type to Search"
+                    ></b-form-input>
+
+                    <b-input-group-append>
+                      <b-button :disabled="!filter" @click="filter = ''"
+                        >Clear</b-button
+                      >
+                    </b-input-group-append>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+              <b-col>
+                <b-form-group
+                  label="Level"
+                  label-for="level-input"
+                  label-cols-sm="3"
+                  label-align-sm="right"
+                  label-size="sm"
+                  class="mb-0"
+                >
+                  <b-input-group size="sm">
+                    <b-form-select
+                      id="level-input"
+                      v-model="filter.logLevel"
+                      :options="logFlagOptions"
+                    ></b-form-select>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+            <b-form-row>
+              <b-col>
+                <b-form-group
+                  label="Per page"
+                  label-for="per-page-input"
+                  label-cols-sm="3"
+                  label-align-sm="right"
+                  label-size="sm"
+                  class="mb-0"
+                >
+                  <b-input-group size="sm">
+                    <b-form-select
+                      id="per-page-input"
+                      v-model="perPage"
+                      :options="perPageOptions"
+                    ></b-form-select>
+                  </b-input-group>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
+          </b-container>
+        </b-sidebar>
+      </b-col>
+    </b-form-row>
     <b-row>
       <b-table
         id="events-table"
@@ -77,6 +111,7 @@
 <script lang="ts">
 import { BvTableCtxObject } from "bootstrap-vue";
 import axios from "axios";
+import qs from "qs";
 
 export default {
   name: "Event",
@@ -88,23 +123,52 @@ export default {
         "level",
         { key: "message", tdClass: "text-left" },
       ],
-      filter: undefined,
+      filter: {
+        message: undefined,
+        logLevel: 2,
+      },
+      filterPanel: false,
       currentPage: 1,
       perPage: 20,
       totalRows: 0,
       perPageOptions: [10, 20, 50, 100, 1000],
+      logFlags: ["DEBUG", "VERBOSE", "INFO", "SHOUT", "WARNING", "ERROR"],
+      logFlagOptions: [
+        { value: 0, text: "DEBUG" },
+        { value: 1, text: "VERBOSE" },
+        { value: 2, text: "INFO" },
+        { value: 3, text: "SHOUT" },
+        { value: 4, text: "WARNING" },
+        { value: 5, text: "ERROR" },
+      ],
     };
   },
   created() {
     this.countRows();
   },
   watch: {
-    filter: function () {
+    "filter.message": function () {
+      this.countRows();
+    },
+    "filter.logLevel": function () {
       this.countRows();
     },
   },
   methods: {
+    getLogFlags(): undefined | Array<string> {
+      if (this.filter.logLevel == undefined) {
+        return undefined;
+      }
+      let flags = [];
+      for (var i in this.logFlagOptions) {
+        if (this.logFlagOptions[i].value >= this.filter.logLevel) {
+          flags.push(this.logFlagOptions[i].text);
+        }
+      }
+      return flags;
+    },
     loadData(ctx: BvTableCtxObject, callback: Function): void {
+      console.log(this.getLogFlags());
       axios
         .get(
           this.$store.state.BACKEND_URL + "/live/logs/" + this.$route.params.id,
@@ -113,7 +177,11 @@ export default {
             params: {
               skip: (ctx.currentPage - 1) * ctx.perPage,
               limit: ctx.perPage,
-              filter: ctx.filter,
+              filter: ctx.filter.message,
+              flags: this.getLogFlags(),
+            },
+            paramsSerializer: function (params) {
+              return qs.stringify(params, { arrayFormat: "repeat" });
             },
           }
         )
@@ -134,7 +202,10 @@ export default {
             "/length",
           {
             headers: { Authorization: "bearer ${this.$store.state.token}" },
-            params: { filter: this.filter },
+            params: { filter: this.filter.message, flags: this.getLogFlags() },
+            paramsSerializer: function (params) {
+              return qs.stringify(params, { arrayFormat: "repeat" });
+            },
           }
         )
         .then((response) => {
@@ -147,3 +218,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.wide-popover {
+  max-width: 100%;
+  height: 250px;
+}
+</style>
