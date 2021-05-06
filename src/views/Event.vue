@@ -17,6 +17,7 @@
             <b-form-input
               id="filter-input"
               v-model="filter"
+              debounce="200"
               type="search"
               placeholder="Type to Search"
             ></b-form-input>
@@ -98,11 +99,12 @@ export default {
     this.countRows();
   },
   watch: {
-    filter: function() { this.countRows(); }
+    filter: function () {
+      this.countRows();
+    },
   },
   methods: {
     loadData(ctx: BvTableCtxObject, callback: Function): void {
-      console.log(ctx);
       axios
         .get(
           this.$store.state.BACKEND_URL + "/live/logs/" + this.$route.params.id,
@@ -124,7 +126,6 @@ export default {
         });
     },
     countRows(): void {
-      console.log("recount");
       axios
         .get(
           this.$store.state.BACKEND_URL +
