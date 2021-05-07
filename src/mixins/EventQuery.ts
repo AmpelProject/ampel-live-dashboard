@@ -1,8 +1,10 @@
+
+import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
 import moment from "moment-relativism";
 
-export default {
+export default Vue.extend({
   props: {
     process: String,
     before: {
@@ -32,4 +34,4 @@ export default {
         });
     },
   },
-};
+});

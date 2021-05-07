@@ -108,11 +108,13 @@
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { BvTableCtxObject } from "bootstrap-vue";
+import { formatDate } from "@/lib/utils";
 import axios from "axios";
 import qs from "qs";
 
-export default {
+export default Vue.extend({
   name: "ProcessLogs",
   props: {
     run_id: String,
@@ -120,7 +122,7 @@ export default {
   data() {
     return {
       fields: [
-        { key: "timestamp", label: "Time", formatter: this.formatDate },
+        { key: "timestamp", label: "Time", formatter: formatDate },
         { key: "location", label: "Where" },
         "level",
         { key: "message", tdClass: "text-left" },
@@ -170,8 +172,6 @@ export default {
       return flags;
     },
     loadData(ctx: BvTableCtxObject, callback: Function): void {
-      console.log(this.getLogFlags());
-      console.log(this.run_id);
       axios
         .get(
           this.$store.state.BACKEND_URL +
@@ -183,6 +183,7 @@ export default {
             params: {
               skip: (ctx.currentPage - 1) * ctx.perPage,
               limit: ctx.perPage,
+              // @ts-ignore
               filter: ctx.filter.message,
               flags: this.getLogFlags(),
             },
@@ -222,19 +223,8 @@ export default {
           console.log(error);
         });
     },
-    formatDate(value: string): string {
-      return Intl.DateTimeFormat(navigator.language, {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: false,
-      }).format(new Date(value));
-    },
   },
-};
+});
 </script>
 
 <style scoped>

@@ -17,10 +17,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import { AxiosResponse } from "axios";
+import Vue, { VueConstructor } from "vue";
 import EventQuery from "@/mixins/EventQuery";
 
-export default Vue.extend({
+// Teach TypeScript about mixins
+// see: https://forum.vuejs.org/t/using-mixins-with-typescript/24256/18
+export default (Vue as VueConstructor<
+  Vue & InstanceType<typeof EventQuery>
+>).extend({
   name: "Troubles",
   mixins: [EventQuery],
   data() {
@@ -29,7 +34,7 @@ export default Vue.extend({
     };
   },
   created() {
-    this.fetch("/live/troubles", (response) => {
+    this.fetch("/live/troubles", (response: AxiosResponse) => {
       this.troubles = response.data.troubles;
     });
   },
