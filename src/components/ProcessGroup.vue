@@ -1,11 +1,24 @@
 <template>
-  <b-card
-    @click="expand = !expand"
-    :title="summary.process"
-    :sub-title="`${summary.count}`"
-  >
-    <b-card v-if="expand"> <event-details :name="summary.process" :before="before" :after="after" /> </b-card>
-  </b-card>
+  <div @click="expand = !expand">
+    <b-card-header>
+      <b-icon :icon="expand ? 'chevron-down' : 'chevron-right'"></b-icon>
+      <b-badge variant="light">T{{ summary.tier }}</b-badge>
+      {{ summary.process.replaceAll("|", " ") }}
+      <b-badge pill variant="danger" v-if="summary.failures">{{
+        summary.failures
+      }}</b-badge>
+      <b-badge pill variant="light">{{ summary.count }}</b-badge>
+    </b-card-header>
+    <b-card no-body>
+      <b-card-body v-if="expand">
+        <event-details
+          :name="summary.process"
+          :before="before"
+          :after="after"
+        />
+      </b-card-body>
+    </b-card>
+  </div>
 </template>
 
 <script lang="ts">
