@@ -36,11 +36,11 @@ function toHHMMSS(sec_num: number | undefined): string | undefined {
   var seconds = Math.floor(sec_num - hours * 3600 - minutes * 60);
 
   return (
-    (hours >= 10 ? "0" : "" + String(hours)) +
+    (hours > 0 ? String(hours) + ":" + (minutes < 10 ? "0" : "") : "") +
+    String(minutes) +
     ":" +
-    (minutes >= 10 ? "0" : "" + String(minutes)) +
-    ":" +
-    (seconds >= 10 ? "0" : "" + String(seconds))
+    (seconds < 10 ? "0" : "") +
+    String(seconds)
   );
 }
 
