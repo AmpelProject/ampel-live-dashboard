@@ -1,22 +1,22 @@
 import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
-import moment from "moment-relativism";
+import relativism from "@/lib/relativism";
 
 export default Vue.extend({
   props: {
     process: String,
     before: {
       default: () => {
-        return moment.relativism("now");
+        return relativism("now");
       },
-      type: Object,
+      type: Date,
     },
     after: {
       default: () => {
-        return moment.relativism("now-1d");
+        return relativism("now-1d");
       },
-      type: Object,
+      type: Date,
     },
   },
   methods: {
@@ -25,8 +25,8 @@ export default Vue.extend({
         .get(this.$store.state.BACKEND_URL + path, {
           headers: { Authorization: "bearer ${this.$store.state.token}" },
           params: {
-            after: this.after.format(),
-            before: this.before.format(),
+            after: this.after.toISOString(),
+            before: this.before.toISOString(),
             process: this.process,
           },
           paramsSerializer: function (params) {

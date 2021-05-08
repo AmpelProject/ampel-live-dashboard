@@ -4,9 +4,13 @@
       <b-icon :icon="expand ? 'chevron-down' : 'chevron-right'"></b-icon>
       <b-badge variant="light">T{{ summary.tier }}</b-badge>
       {{ summary.process.replaceAll("|", " ") }}
-      <b-badge pill variant="danger" v-if="summary.failures" :to="'/events/'+summary.process+'/troubles'">{{
-        summary.failures
-      }}</b-badge>
+      <b-badge
+        pill
+        variant="danger"
+        v-if="summary.failures"
+        :to="'/events/' + summary.process + '/troubles'"
+        >{{ summary.failures }}</b-badge
+      >
       <b-badge pill variant="light">{{ summary.count }}</b-badge>
     </b-card-header>
     <b-card no-body>
@@ -33,8 +37,8 @@ export default Vue.extend({
   },
   props: {
     summary: Object as PropType<EventSummary>,
-    before: Object,
-    after: Object,
+    before: Date,
+    after: Date,
   },
   data: () => {
     return {
