@@ -8,6 +8,6 @@ function formatDate(value: string): string {
     second: "numeric",
     hour12: false,
   }).format(new Date(value));
-};
+}
 
 export { formatDate };
