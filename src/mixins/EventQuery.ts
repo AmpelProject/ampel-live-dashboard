@@ -7,16 +7,22 @@ export default Vue.extend({
   props: {
     process: String,
     before: {
-      default: () => {
-        return relativism("now");
-      },
-      type: Date,
+      default: "now",
+      type: String,
+      required: true,
     },
     after: {
-      default: () => {
-        return relativism("now-1d");
-      },
-      type: Date,
+      default: "now-1d",
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    afterDate() {
+      return relativism(this.after).toISOString();
+    },
+    beforeDate() {
+      return relativism(this.after).toISOString();
     },
   },
   methods: {
@@ -25,8 +31,8 @@ export default Vue.extend({
         .get(this.$store.state.BACKEND_URL + path, {
           headers: { Authorization: "bearer ${this.$store.state.token}" },
           params: {
-            after: this.after.toISOString(),
-            before: this.before.toISOString(),
+            after: this.afterDate,
+            before: this.beforeDate,
             process: this.process,
           },
           paramsSerializer: function (params) {
