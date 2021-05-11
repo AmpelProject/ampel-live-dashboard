@@ -1,5 +1,5 @@
 import Vue from "vue";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 import {
   validateRelativism,
@@ -34,7 +34,10 @@ export default Vue.extend({
     },
   },
   methods: {
-    fetch: function (path: string, callback: Function): void {
+    fetch: function (
+      path: string,
+      callback: (response: AxiosResponse) => void
+    ): void {
       axios
         .get(this.$store.state.BACKEND_URL + path, {
           headers: { Authorization: "bearer ${this.$store.state.token}" },
@@ -47,9 +50,7 @@ export default Vue.extend({
             return qs.stringify(params, { arrayFormat: "repeat" });
           },
         })
-        .then((response) => {
-          callback(response);
-        })
+        .then(callback)
         .catch((error) => {
           console.log(error);
         });
