@@ -26,14 +26,6 @@ export default Vue.extend({
     return {
       before: "now",
       after: "now-1d",
-      isLoading: true,
-      filter: null,
-      filterOn: [],
-      fields: [
-        { key: "tier" },
-        { key: "process", tdClass: "text-left" },
-        { key: "count", label: "count" },
-      ],
       processes: [] as Array<EventSummary>,
     };
   },
@@ -50,7 +42,6 @@ export default Vue.extend({
   },
   methods: {
     loadData() {
-      this.isLoading = true;
       axios
         .get(this.$store.state.BACKEND_URL + "/live/event_summary", {
           headers: { Authorization: "bearer ${this.$store.state.token}" },
@@ -61,10 +52,8 @@ export default Vue.extend({
         })
         .then((response) => {
           this.processes = response.data.processes;
-          this.isLoading = false;
         })
         .catch((error) => {
-          this.isLoading = false;
           console.log(error);
         });
     },
