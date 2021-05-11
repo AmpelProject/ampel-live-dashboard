@@ -1,7 +1,11 @@
 import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
-import relativism from "@/lib/relativism";
+import {
+  validateRelativism,
+  parseRelativism,
+  buildDate,
+} from "@/lib/relativism";
 
 export default Vue.extend({
   props: {
@@ -10,19 +14,23 @@ export default Vue.extend({
       default: "now",
       type: String,
       required: true,
+      validator: validateRelativism,
     },
     after: {
       default: "now-1d",
       type: String,
       required: true,
+      validator: validateRelativism,
     },
   },
+  // Use computed properties to parse and transform date, as TS seems to insist
+  // that Date-typed props are actually Date | string
   computed: {
     afterDate() {
-      return relativism(this.after).toISOString();
+      return buildDate(parseRelativism(this.after)).toISOString();
     },
     beforeDate() {
-      return relativism(this.after).toISOString();
+      return buildDate(parseRelativism(this.before)).toISOString();
     },
   },
   methods: {

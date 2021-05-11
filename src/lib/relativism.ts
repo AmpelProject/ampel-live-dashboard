@@ -159,11 +159,11 @@ const buildDate = function (relativism: Relativism): Date {
 
 const regex = /([+|-])(\d+(\.\d+)?)(\w+)(([|,/])(\w+))?/;
 
-const parseStr = function (str: string): Date {
+const parseRelativism = function (str: string): Relativism {
   // If there are no subtractions, additions or rounding signs, just return
   // the current datetime as a momentjs instance.
   if (str === "now") {
-    return new Date();
+    return {};
   }
 
   // Remove "now" from the string and parse the remaining characters.
@@ -172,19 +172,19 @@ const parseStr = function (str: string): Date {
   // When the given string only has "now" and a rounding sign, don't apply
   // any subtractions or additions.
   if (rest[0] === "|" || rest[0] === "/") {
-    return buildDate({
+    return {
       round: {
         to: getRoundingOp(rest[0]),
         unit: getUnit(rest.substr(1)),
       },
-    });
+    };
   }
 
   // Match the entire string and unpack the groups into logical variables.
   // Would be nice to have array unpacking here, alas.
   const matches = str.match(regex);
   if (matches) {
-    return buildDate({
+    return {
       operator: getOperator(matches[1]),
       amount: parseFloat(matches[2]),
       unit: getUnit(matches[4]),
@@ -192,10 +192,19 @@ const parseStr = function (str: string): Date {
         to: getRoundingOp(matches[6]),
         unit: getUnit(matches[7]),
       },
-    });
+    };
   } else {
     throw new Error("Could not parse " + str + " as relativism");
   }
 };
 
-export { parseStr as default };
+const validateRelativism = function (str: string): boolean {
+  try {
+    parseRelativism(str);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export { parseRelativism, validateRelativism, buildDate };
