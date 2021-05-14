@@ -10,7 +10,12 @@ export default new Vuex.Store({
     token: undefined,
     token_payload: undefined,
   },
-  mutations: {},
+  mutations: {
+    login(state, payload) {
+      state.token = payload.token;
+      state.token_payload = jwt_decode(payload.token.access_token);
+    },
+  },
   actions: {},
   modules: {},
 });

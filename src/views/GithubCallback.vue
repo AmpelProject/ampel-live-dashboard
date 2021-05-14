@@ -17,7 +17,6 @@
 
 <script>
 import axios from "axios";
-import jwt_decode from "jwt-decode";
 
 export default {
   name: "GithubCallback",
@@ -49,11 +48,8 @@ export default {
       axios
         .post(url, data)
         .then((response) => {
-          this.$store.state.token = response.data;
-          this.$store.state.token_payload = jwt_decode(
-            response.data.access_token
-          );
-          this.$router.replace("/");
+          this.$store.commit("login", { token: response.data });
+          this.$router.replace("/profile");
         })
         .catch((error) => {
           this.error = {
