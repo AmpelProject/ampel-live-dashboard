@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row v-for="summary in processes" v-bind:key="summary.process">
       <b-col
-        ><process-group :summary="summary" :before="before" :after="after"
+        ><process-group :summary="summary" :timeRangeQuery="timeRangeQuery"
       /></b-col>
     </b-row>
   </b-container>
@@ -27,9 +27,9 @@ export default Vue.extend({
       processes: [] as Array<EventSummary>,
     };
   },
-  computed: mapState(["timeRange"]),
+  computed: mapState(["timeRangeQuery"]),
   watch: {
-    timeRange() {
+    timeRangeQuery() {
       this.loadData();
     },
   },
@@ -40,10 +40,7 @@ export default Vue.extend({
     loadData() {
       this.$store.state.api_client
         .get("/live/event_summary", {
-          params: {
-            after: this.$store.state.afterISOString,
-            before: this.$store.state.beforeISOString,
-          },
+          params: this.$store.state.timeRangeQuery,
         })
         .then((response: AxiosResponse) => {
           this.processes = response.data.processes;

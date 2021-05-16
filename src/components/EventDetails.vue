@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
+import { AxiosResponse } from "axios";
 import { formatDate } from "@/lib/utils";
 
 function toHHMMSS(sec_num: number | undefined): string | undefined {
@@ -48,8 +48,7 @@ export default Vue.extend({
   name: "EventDetails",
   props: {
     name: String,
-    before: Object,
-    after: Object,
+    timeRangeQuery: Object,
   },
   data: () => {
     return {
@@ -71,19 +70,23 @@ export default Vue.extend({
   created() {
     this.loadData();
   },
+  watch: {
+    timeRangeQuery() {
+      this.loadData();
+    },
+  },
   methods: {
     loadData() {
       this.loading = true;
-      axios
-        .get(this.$store.state.BACKEND_URL + "/live/events/" + this.name, {
-          headers: { Authorization: "bearer ${this.$store.state.token}" },
-          params: { after: this.after.format(), before: this.before.format() },
+      this.$store.state.api_client
+        .get("/live/events/" + this.name, {
+          params: this.timeRangeQuery,
         })
-        .then((response) => {
+        .then((response: AxiosResponse) => {
           this.events = response.data.events.slice().reverse();
           this.loading = false;
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           this.loading = false;
           console.log(error);
         });

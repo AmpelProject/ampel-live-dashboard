@@ -20,8 +20,10 @@ export default new Vuex.Store({
     token_payload: undefined,
     api_client: undefined as AxiosInstance | undefined,
     timeRange: { after: "now-1d", before: "now" },
-    afterISOString: buildDate(parseRelativism("now-1d")).toISOString(),
-    beforeISOString: buildDate(parseRelativism("now")).toISOString(),
+    timeRangeQuery: {
+      after: buildDate(parseRelativism("now-1d")).toISOString(),
+      before: buildDate(parseRelativism("now")).toISOString(),
+    },
   },
   mutations: {
     login(state, payload) {
@@ -37,12 +39,10 @@ export default new Vuex.Store({
     },
     setTimeRange(state, payload) {
       state.timeRange = payload;
-      state.afterISOString = buildDate(
-        parseRelativism(payload.after)
-      ).toISOString();
-      state.beforeISOString = buildDate(
-        parseRelativism(payload.before)
-      ).toISOString();
+      state.timeRangeQuery = {
+        after: buildDate(parseRelativism(payload.after)).toISOString(),
+        before: buildDate(parseRelativism(payload.before)).toISOString(),
+      };
     },
   },
   actions: {},

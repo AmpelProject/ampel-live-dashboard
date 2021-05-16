@@ -17,8 +17,7 @@
       <b-card-body v-if="expand">
         <event-details
           :name="summary.process"
-          :before="before"
-          :after="after"
+          :timeRangeQuery="timeRangeQuery"
         />
       </b-card-body>
     </b-card>
@@ -37,8 +36,7 @@ export default Vue.extend({
   },
   props: {
     summary: Object as PropType<EventSummary>,
-    before: Date,
-    after: Date,
+    timeRangeQuery: Object,
   },
   data: () => {
     return {
