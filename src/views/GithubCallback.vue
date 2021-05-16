@@ -1,18 +1,20 @@
 <template>
-  <div class="about">
-    <div v-if="!error">Generating token ...</div>
-    <div v-else-if="error.error">
-      <b-card title="Authorization error" :sub-title="error.error">
-        <b-card-text>
-          {{ error.error_description }}
-        </b-card-text>
+  <b-container class="mb-2 text-center">
+    <div class="about">
+      <div v-if="!error">Generating token ...</div>
+      <div v-else-if="error.error">
+        <b-card title="Authorization error" :sub-title="error.error">
+          <b-card-text>
+            {{ error.error_description }}
+          </b-card-text>
 
-        <a v-if="error.error_uri" :href="error.error_uri" class="card-link"
-          >More info</a
-        >
-      </b-card>
+          <a v-if="error.error_uri" :href="error.error_uri" class="card-link"
+            >More info</a
+          >
+        </b-card>
+      </div>
     </div>
-  </div>
+  </b-container>
 </template>
 
 <script>

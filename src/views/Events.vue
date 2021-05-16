@@ -14,8 +14,8 @@ import { EventSummary } from "../types";
 
 // import humanizeDuration from "humanize-duration";
 import ProcessGroup from "@/components/ProcessGroup.vue";
-import { parseRelativism, buildDate } from "@/lib/relativism";
-import axios from "axios";
+import { AxiosResponse } from "axios";
+import { mapState } from "vuex";
 
 export default Vue.extend({
   name: "Events",
@@ -24,17 +24,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      before: "now",
-      after: "now-1d",
       processes: [] as Array<EventSummary>,
     };
   },
-  computed: {
-    afterDate(): string {
-      return buildDate(parseRelativism(this.after)).toISOString();
-    },
-    beforeDate(): string {
-      return buildDate(parseRelativism(this.before)).toISOString();
+  computed: mapState(["timeRange"]),
+  watch: {
+    timeRange() {
+      this.loadData();
     },
   },
   created() {
@@ -42,18 +38,17 @@ export default Vue.extend({
   },
   methods: {
     loadData() {
-      axios
-        .get(this.$store.state.BACKEND_URL + "/live/event_summary", {
-          headers: { Authorization: "bearer ${this.$store.state.token}" },
+      this.$store.state.api_client
+        .get("/live/event_summary", {
           params: {
-            after: this.afterDate,
-            before: this.beforeDate,
+            after: this.$store.state.afterISOString,
+            before: this.$store.state.beforeISOString,
           },
         })
-        .then((response) => {
+        .then((response: AxiosResponse) => {
           this.processes = response.data.processes;
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.log(error);
         });
     },
