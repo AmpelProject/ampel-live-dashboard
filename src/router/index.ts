@@ -47,6 +47,12 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Event.vue"),
   },
   {
+    path: "/channel/:id",
+    name: "Channel",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Channel.vue"),
+  },
+  {
     path: "/auth/github",
     name: "GithubCallback",
     meta: {
