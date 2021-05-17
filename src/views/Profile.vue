@@ -1,7 +1,21 @@
 <template>
   <b-container class="text-center mb-2">
     <div class="about">
-      <div v-if="!token">Authorizing with GitHub ...</div>
+      <div v-if="!$store.state.token">
+        <div v-if="!loginRequested">
+          <b-container>
+            <b-card class="my-5 text-center">
+              <div class="mb-2">No potatoes for you.</div>
+              <div>
+                <b-button class="mb-2" @click="login()" variant="primary"
+                  ><b-icon-github></b-icon-github> Log in with GitHub</b-button
+                >
+              </div>
+            </b-card>
+          </b-container>
+        </div>
+        <div v-else>Authorizing with GitHub ...</div>
+      </div>
       <div v-else>
         <b-container>
           <b-row>
@@ -49,6 +63,11 @@ import axios from "axios";
 
 export default {
   name: "Profile",
+  data() {
+    return {
+      loginRequested: false,
+    };
+  },
   computed: {
     token() {
       return this.$store.state.token;
@@ -60,16 +79,12 @@ export default {
       return new Date(this.$store.state.token_payload.exp * 1000);
     },
   },
-  created() {
-    if (!this.$store.state.token) {
-      this.login();
-    }
-  },
   methods: {
     humanize(duration) {
       return humanizeDuration(duration, { round: true });
     },
     login() {
+      this.loginRequested = true;
       axios
         .get(this.$store.state.BACKEND_AUTH_URL + "/auth/login")
         .then((response) => {

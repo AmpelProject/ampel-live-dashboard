@@ -51,7 +51,10 @@ export default {
         .post(url, data)
         .then((response) => {
           this.$store.commit("login", { token: response.data });
-          this.$router.replace("/profile");
+          const target =
+            localStorage.getItem("redirectAfterLogin") || "/profile";
+          localStorage.removeItem("redirectAfterLogin");
+          this.$router.replace(target);
         })
         .catch((error) => {
           this.error = {

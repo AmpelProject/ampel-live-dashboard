@@ -14,6 +14,9 @@ const routes = [
   {
     path: "/profile",
     name: "Profile",
+    meta: {
+      authRoute: true,
+    },
     component: Profile,
   },
   {
@@ -46,6 +49,9 @@ const routes = [
   {
     path: "/auth/github",
     name: "GithubCallback",
+    meta: {
+      authRoute: true,
+    },
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/GithubCallback.vue"),
   },
