@@ -88,6 +88,8 @@ export default {
       axios
         .get(this.$store.state.BACKEND_AUTH_URL + "/auth/login")
         .then((response) => {
+          // Use state to validate redirect from auth provider
+          localStorage.setItem("redirectState", response.data.params.state);
           window.location = response.data.url;
         });
     },

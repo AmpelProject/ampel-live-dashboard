@@ -37,9 +37,24 @@ export default {
   },
   methods: {
     authorize() {
+      // GitHub refused to issue an auth code
       if (this.$route.query.code == undefined) {
         this.error = this.$route.query;
         return;
+        // Got unexpected state (possible CSRF attack)
+      } else if (
+        this.$route.query.state != localStorage.getItem("redirectState")
+      ) {
+        this.error = {
+          error: "Forged OAuth2 request",
+          error_description: `Expected state ${localStorage.getItem(
+            "redirectState"
+          )}, got ${this.$route.query.state}`,
+          error_uri: "https://auth0.com/docs/protocols/state-parameters",
+        };
+        return;
+      } else {
+        localStorage.removeItem("redirectState");
       }
       const url = this.$store.state.BACKEND_AUTH_URL + "/auth/authorize";
       const data = {
