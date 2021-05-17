@@ -4,9 +4,11 @@
       <b-navbar type="light" variant="light">
         <b-navbar-brand to="/">
           <img
-            src="https://placekitten.com/g/30/30"
+            src="@/assets/logo.png"
+            width="30"
+            height="30"
             class="d-inline-block align-top"
-            alt="Kitten"
+            alt="Ampel logo"
           />
           Ampel
         </b-navbar-brand>
