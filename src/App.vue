@@ -13,6 +13,7 @@
           Ampel
         </b-navbar-brand>
         <b-navbar-nav>
+          <b-nav-item to="/profile">Profile</b-nav-item>
           <b-nav-item to="/events">Events</b-nav-item>
         </b-navbar-nav>
 
