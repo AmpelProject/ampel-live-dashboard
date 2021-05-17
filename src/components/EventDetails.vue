@@ -25,24 +25,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { AxiosResponse } from "axios";
-import { formatDate } from "@/lib/utils";
-
-function toHHMMSS(sec_num: number | undefined): string | undefined {
-  if (sec_num == undefined) {
-    return undefined;
-  }
-  var hours = Math.floor(sec_num / 3600);
-  var minutes = Math.floor((sec_num - hours * 3600) / 60);
-  var seconds = Math.floor(sec_num - hours * 3600 - minutes * 60);
-
-  return (
-    (hours > 0 ? String(hours) + ":" + (minutes < 10 ? "0" : "") : "") +
-    String(minutes) +
-    ":" +
-    (seconds < 10 ? "0" : "") +
-    String(seconds)
-  );
-}
+import { formatDate, toHHMMSS } from "@/lib/utils";
 
 export default Vue.extend({
   name: "EventDetails",

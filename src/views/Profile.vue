@@ -1,6 +1,6 @@
 <template>
-  <b-container class="text-center mb-2">
-    <div class="about">
+  <b-container class="mb-2">
+    <div>
       <div v-if="!$store.state.token">
         <div v-if="!loginRequested">
           <b-container>
@@ -18,39 +18,81 @@
       </div>
       <div v-else>
         <b-container>
-          <b-row>
-            <b-col>User: {{ user }}</b-col>
-
-            <countdown :end-time="expire" :speed="10000">
-              <template v-slot:process="anyYouWantedScopName">
-                <b-col>
-                  Token expires in:
-                  {{ humanize(anyYouWantedScopName.remainingTime) }}
-                </b-col>
-              </template>
-              <template v-slot:finish>
-                <b-col>Token expired!</b-col>
-              </template>
-            </countdown>
-
+          <b-row class="mb-2">
             <b-col>
-              <b-button variant="success" title="Refresh token" @click="login"
-                ><b-icon-arrow-repeat></b-icon-arrow-repeat
-              ></b-button>
+              <b-form>
+                <b-form-group id="api-token-group" label-for="access_token">
+                  <template #label>
+                    API token
+                    <countdown :end-time="expire" :speed="10000" tag="span">
+                      <template v-slot:process="anyYouWantedScopName">
+                        (valid for
+                        {{ humanize(anyYouWantedScopName.remainingTime) }})
+                      </template>
+                      <template v-slot:finish> (expired!) </template>
+                    </countdown>
+                  </template>
+
+                  <b-input-group class="mt-3">
+                    <b-form-input
+                      id="access_token"
+                      v-model="token"
+                      :readonly="true"
+                      v-b-tooltip.hover
+                      title="This is your access token. Use it to make direct queries to the Ampel API."
+                    >
+                    </b-form-input>
+                    <b-input-group-append>
+                      <b-button
+                        variant="success"
+                        title="Refresh token"
+                        @click="login"
+                        ><b-icon-arrow-repeat></b-icon-arrow-repeat
+                      ></b-button>
+                      <b-button
+                        variant="info"
+                        title="Copy to clipboard"
+                        v-clipboard="() => token"
+                        ><b-icon-clipboard></b-icon-clipboard
+                      ></b-button>
+                    </b-input-group-append>
+                  </b-input-group>
+                </b-form-group>
+              </b-form>
             </b-col>
           </b-row>
-          <b-input-group prepend="API token" class="mt-3">
-            <b-form-input id="access_token" v-model="token" :readonly="true">
-            </b-form-input>
-            <b-input-group-append>
-              <b-button
-                variant="info"
-                title="Copy to clipboard"
-                v-clipboard="() => token"
-                ><b-icon-clipboard></b-icon-clipboard
-              ></b-button>
-            </b-input-group-append>
-          </b-input-group>
+
+          <b-row
+            class="mt-1"
+            v-b-tooltip.hover
+            title="These are your identities. You have access to any Ampel channel that your username, one of your organizations, or one of your teams as a member."
+          >
+            <b-col>
+              <b-card-group deck>
+                <b-card header="User">{{ user }}</b-card>
+                <b-card header="Organizations">
+                  <b-list-group>
+                    <b-list-group-item
+                      v-for="org in $store.state.token_payload.orgs"
+                      :key="org"
+                    >
+                      {{ org }}
+                    </b-list-group-item>
+                  </b-list-group>
+                </b-card>
+                <b-card text-left header="Teams">
+                  <b-list-group>
+                    <b-list-group-item
+                      v-for="team in $store.state.token_payload.teams"
+                      :key="team"
+                    >
+                      {{ team }}
+                    </b-list-group-item>
+                  </b-list-group>
+                </b-card>
+              </b-card-group>
+            </b-col>
+          </b-row>
         </b-container>
       </div>
     </div>
@@ -58,7 +100,7 @@
 </template>
 
 <script>
-import humanizeDuration from "humanize-duration";
+import { toHHMMSS } from "@/lib/utils";
 import axios from "axios";
 
 export default {
@@ -81,7 +123,7 @@ export default {
   },
   methods: {
     humanize(duration) {
-      return humanizeDuration(duration, { round: true });
+      return toHHMMSS(duration / 1000);
     },
     login() {
       this.loginRequested = true;
