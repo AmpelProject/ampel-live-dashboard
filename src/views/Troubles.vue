@@ -9,12 +9,21 @@
       >
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ doc._exc_content.error }}</h5>
-          <small>{{ formatDate(doc.timestamp) }}</small>
+          <small
+            ><router-link :to="{ name: 'Event', params: { id: doc.run } }">{{
+              formatDate(doc.timestamp)
+            }}</router-link></small
+          >
         </div>
 
         <p class="mb-1">{{ doc._exc_content.message }}</p>
 
-        <small>{{ doc.process }}</small>
+        <small
+          ><router-link
+            :to="{ name: 'Process', params: { id: doc.process } }"
+            >{{ doc.process }}</router-link
+          ></small
+        >
       </b-list-group-item>
     </b-list-group>
   </div>
