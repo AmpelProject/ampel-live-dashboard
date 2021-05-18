@@ -37,6 +37,7 @@ const routes = [
   {
     path: "/events/:process/troubles",
     name: "Troubles",
+    props: (route: Route) => ({ process: route.params.process }),
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Troubles.vue"),
   },
