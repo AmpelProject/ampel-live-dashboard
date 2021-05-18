@@ -19,6 +19,7 @@
 
 <script>
 import axios from "axios";
+import axiosRetry from "axios-retry";
 
 export default {
   name: "GithubCallback",
@@ -56,14 +57,22 @@ export default {
       } else {
         localStorage.removeItem("redirectState");
       }
-      const url = this.$store.state.BACKEND_AUTH_URL + "/auth/authorize";
-      const data = {
-        state: this.$route.query.state,
-        code: this.$route.query.code,
-      };
 
-      axios
-        .post(url, data)
+      const path = "/auth/authorize";
+      const client = axios.create({
+        baseURL: this.$store.state.BACKEND_AUTH_URL,
+      });
+      axiosRetry(client, {
+        retryDelay: axiosRetry.exponentialDelay,
+        // retry any method that returns 5xx, not just idempotent ones
+        retryCondition: axiosRetry.isRetryableError,
+      });
+
+      client
+        .post(path, {
+          state: this.$route.query.state,
+          code: this.$route.query.code,
+        })
         .then((response) => {
           this.$store.commit("login", { token: response.data });
           const target =
@@ -74,7 +83,7 @@ export default {
         .catch((error) => {
           this.error = {
             error: error.name,
-            error_description: url + " " + error.message,
+            error_description: client.baseURL + path + " " + error.message,
           };
         });
     },

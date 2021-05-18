@@ -119,6 +119,7 @@
 <script>
 import { toHHMMSS } from "@/lib/utils";
 import axios from "axios";
+import axiosRetry from "axios-retry";
 
 export default {
   name: "Profile",
@@ -144,13 +145,15 @@ export default {
     },
     login() {
       this.loginRequested = true;
-      axios
-        .get(this.$store.state.BACKEND_AUTH_URL + "/auth/login")
-        .then((response) => {
-          // Use state to validate redirect from auth provider
-          localStorage.setItem("redirectState", response.data.params.state);
-          window.location = response.data.url;
-        });
+      const client = axios.create({
+        baseURL: this.$store.state.BACKEND_AUTH_URL,
+      });
+      axiosRetry(client, { retryDelay: axiosRetry.exponentialDelay });
+      client.get("/auth/login").then((response) => {
+        // Use state to validate redirect from auth provider
+        localStorage.setItem("redirectState", response.data.params.state);
+        window.location = response.data.url;
+      });
     },
   },
 };

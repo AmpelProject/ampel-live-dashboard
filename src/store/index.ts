@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios, { AxiosInstance } from "axios";
+import axiosRetry from "axios-retry";
 import jwt_decode from "jwt-decode";
 import qs from "qs";
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
           return qs.stringify(params, { arrayFormat: "repeat" });
         },
       });
+      axiosRetry(state.api_client, { retryDelay: axiosRetry.exponentialDelay });
     },
     setTimeRange(state, payload) {
       state.timeRange = payload;
