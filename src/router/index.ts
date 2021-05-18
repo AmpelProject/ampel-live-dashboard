@@ -61,6 +61,13 @@ const routes = [
     props: (route: Route) => ({ path: "/live/process/" + route.params.id }),
   },
   {
+    path: "/trouble/:id",
+    name: "Trouble",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../components/JsonItem.vue"),
+    props: (route: Route) => ({ path: "/live/troubles/" + route.params.id }),
+  },
+  {
     path: "/auth/github",
     name: "GithubCallback",
     meta: {

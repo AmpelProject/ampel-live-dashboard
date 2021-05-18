@@ -2,10 +2,10 @@
   <div>
     <b-list-group>
       <b-list-group-item
-        href="#"
         class="flex-column align-items-start"
         v-for="doc in troubles"
-        :key="doc.timestamp"
+        :key="doc._id"
+        :to="{ name: 'Trouble', params: { id: doc._id } }"
       >
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ doc._exc_content.error }}</h5>
