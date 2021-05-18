@@ -3,14 +3,31 @@
     <div>
       <div v-if="!$store.state.token">
         <div v-if="!loginRequested">
-          <b-container>
-            <b-card class="my-5 text-center">
-              <div class="mb-2">No potatoes for you.</div>
-              <div>
-                <b-button class="mb-2" @click="login()" variant="primary"
-                  ><b-icon-github></b-icon-github> Log in with GitHub</b-button
-                >
-              </div>
+          <b-container class="text-center">
+            <b-card no-body class="my-5 text-center" style="max-width: 540px">
+              <b-row no-gutters>
+                <b-col md="6">
+                  <b-card-img
+                    :src="require('../assets/logo.png')"
+                    width="220"
+                    height="220"
+                    alt="Image"
+                  ></b-card-img>
+                </b-col>
+                <b-col md="6">
+                  <b-card-body title="Ampel Live Dashboard">
+                    <b-card-text>
+                      Please authenticate to continue. Your GitHub username and
+                      organization memberships will be used to grant access to
+                      individual Ampel channels.
+                    </b-card-text>
+                    <b-button class="mb-2" @click="login()" variant="primary"
+                      ><b-icon-github></b-icon-github> Log in with
+                      GitHub</b-button
+                    >
+                  </b-card-body>
+                </b-col>
+              </b-row>
             </b-card>
           </b-container>
         </div>
