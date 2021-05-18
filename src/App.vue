@@ -13,8 +13,8 @@
           Ampel
         </b-navbar-brand>
         <b-navbar-nav>
-          <b-nav-item to="/profile">Profile</b-nav-item>
-          <b-nav-item to="/events">Events</b-nav-item>
+          <b-nav-item to="/profile">Token</b-nav-item>
+          <!-- <b-nav-item to="/events">Events</b-nav-item> -->
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
