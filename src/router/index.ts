@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import VueRouter, { Route } from "vue-router";
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue";
 
@@ -50,7 +50,15 @@ const routes = [
     path: "/channel/:id",
     name: "Channel",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Channel.vue"),
+      import(/* webpackChunkName: "about" */ "../components/JsonItem.vue"),
+    props: (route: Route) => ({ path: "/live/channel/" + route.params.id }),
+  },
+  {
+    path: "/process/:id",
+    name: "Process",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../components/JsonItem.vue"),
+    props: (route: Route) => ({ path: "/live/process/" + route.params.id }),
   },
   {
     path: "/auth/github",

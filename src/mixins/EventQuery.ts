@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { mapState } from "vuex";
 import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 import {
@@ -10,48 +11,22 @@ import {
 export default Vue.extend({
   props: {
     process: String,
-    before: {
-      default: "now",
-      type: String,
-      required: true,
-      validator: validateRelativism,
-    },
-    after: {
-      default: "now-1d",
-      type: String,
-      required: true,
-      validator: validateRelativism,
-    },
   },
-  // Use computed properties to parse and transform date, as TS seems to insist
-  // that Date-typed props are actually Date | string
-  computed: {
-    afterDate() {
-      return buildDate(parseRelativism(this.after)).toISOString();
-    },
-    beforeDate() {
-      return buildDate(parseRelativism(this.before)).toISOString();
-    },
-  },
+  computed: mapState(["timeRangeQuery"]),
   methods: {
     fetch: function (
       path: string,
       callback: (response: AxiosResponse) => void
     ): void {
-      axios
-        .get(this.$store.state.BACKEND_URL + path, {
-          headers: { Authorization: "bearer ${this.$store.state.token}" },
+      this.$store.state.api_client
+        .get(path, {
           params: {
-            after: this.afterDate,
-            before: this.beforeDate,
             process: this.process,
-          },
-          paramsSerializer: function (params) {
-            return qs.stringify(params, { arrayFormat: "repeat" });
+            ...this.$store.state.timeRangeQuery,
           },
         })
         .then(callback)
-        .catch((error) => {
+        .catch((error: Error) => {
           console.log(error);
         });
     },

@@ -1,22 +1,26 @@
 <template>
   <b-container>
-    <vue-json-pretty :data="channel"> </vue-json-pretty>
+    <vue-json-pretty :data="item"> </vue-json-pretty>
   </b-container>
 </template>
 
 <script lang="ts">
+import Vue from "vue";
 import { AxiosResponse } from "axios";
 import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
 
-export default {
-  name: "Channel",
+export default Vue.extend({
+  name: "JsonItem",
   components: {
     VueJsonPretty,
   },
+  props: {
+    path: String,
+  },
   data() {
     return {
-      channel: {},
+      item: {},
     };
   },
   created() {
@@ -25,14 +29,14 @@ export default {
   methods: {
     load() {
       this.$store.state.api_client
-        .get("/live/channel/" + this.$route.params.id)
+        .get(this.path)
         .then((response: AxiosResponse) => {
-          this.channel = response.data;
+          this.item = response.data;
         })
         .catch((error: Error) => {
           console.log(error);
         });
     },
   },
-};
+});
 </script>
