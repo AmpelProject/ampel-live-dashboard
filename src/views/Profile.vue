@@ -7,12 +7,12 @@
             <b-card no-body class="my-5 text-center" style="max-width: 540px">
               <b-row no-gutters>
                 <b-col md="6">
-                  <b-card-img
-                    :src="require('../assets/logo.png')"
-                    width="220"
-                    height="220"
-                    alt="Image"
-                  ></b-card-img>
+                  <b-aspect>
+                    <b-card-img
+                      :src="require('../assets/logo.png')"
+                      alt="Image"
+                    ></b-card-img
+                  ></b-aspect>
                 </b-col>
                 <b-col md="6">
                   <b-card-body title="Ampel Live Dashboard">
