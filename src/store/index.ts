@@ -4,6 +4,7 @@ import axios, { AxiosInstance } from "axios";
 import axiosRetry from "axios-retry";
 import jwt_decode from "jwt-decode";
 import qs from "qs";
+import { TokenPayload } from "@/types";
 
 import {
   validateRelativism,
@@ -62,7 +63,7 @@ const getToken = function (store: any) {
   const token = localStorage.getItem("token");
   if (token) {
     try {
-      const content = jwt_decode(token);
+      const content: TokenPayload = jwt_decode(token);
       console.log(content.exp, Date.now() / 1000);
       if (!(content.exp < Date.now() / 1000)) {
         store.commit("login", token);
