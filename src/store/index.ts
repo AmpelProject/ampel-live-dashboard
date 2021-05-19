@@ -13,7 +13,7 @@ import {
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     BACKEND_AUTH_URL: "https://ampel.zeuthen.desy.de/api",
     BACKEND_URL: "https://ampel.zeuthen.desy.de/api",
@@ -27,9 +27,10 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    login(state, payload) {
-      state.token = payload.token.access_token;
-      state.token_payload = jwt_decode(payload.token.access_token);
+    login(state, access_token) {
+      localStorage.setItem("token", access_token);
+      state.token = access_token;
+      state.token_payload = jwt_decode(access_token);
       state.api_client = axios.create({
         baseURL: state.BACKEND_URL,
         headers: { Authorization: `bearer ${state.token}` },
@@ -38,6 +39,12 @@ export default new Vuex.Store({
         },
       });
       axiosRetry(state.api_client, { retryDelay: axiosRetry.exponentialDelay });
+    },
+    logout(state) {
+      localStorage.removeItem("token");
+      state.token = undefined;
+      state.token_payload = undefined;
+      state.api_client = undefined;
     },
     setTimeRange(state, payload) {
       state.timeRange = payload;
@@ -50,3 +57,26 @@ export default new Vuex.Store({
   actions: {},
   modules: {},
 });
+
+const getToken = function (store: any) {
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const content = jwt_decode(token);
+      console.log(content.exp, Date.now() / 1000);
+      if (!(content.exp < Date.now() / 1000)) {
+        store.commit("login", token);
+      } else {
+        console.log("Removing expired token");
+        store.commit("logout");
+      }
+    } catch (error) {
+      console.log(error);
+      store.commit("logout");
+    }
+  }
+};
+
+getToken(store);
+
+export default store;

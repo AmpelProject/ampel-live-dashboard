@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
     !store.state.token &&
     !to.matched.some((record) => record.meta.authRoute)
   ) {
-    localStorage.setItem("redirectAfterLogin", to.path);
+    sessionStorage.setItem("redirectAfterLogin", to.path);
     next({ name: "Profile" });
   } else {
     next();

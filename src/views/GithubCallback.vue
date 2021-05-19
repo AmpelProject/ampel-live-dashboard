@@ -44,18 +44,18 @@ export default {
         return;
         // Got unexpected state (possible CSRF attack)
       } else if (
-        this.$route.query.state != localStorage.getItem("redirectState")
+        this.$route.query.state != sessionStorage.getItem("redirectState")
       ) {
         this.error = {
           error: "Forged OAuth2 request",
-          error_description: `Expected state ${localStorage.getItem(
+          error_description: `Expected state ${sessionStorage.getItem(
             "redirectState"
           )}, got ${this.$route.query.state}`,
           error_uri: "https://auth0.com/docs/protocols/state-parameters",
         };
         return;
       } else {
-        localStorage.removeItem("redirectState");
+        sessionStorage.removeItem("redirectState");
       }
 
       const path = "/auth/authorize";
@@ -74,10 +74,10 @@ export default {
           code: this.$route.query.code,
         })
         .then((response) => {
-          this.$store.commit("login", { token: response.data });
+          this.$store.commit("login", response.data.access_token);
           const target =
-            localStorage.getItem("redirectAfterLogin") || "/profile";
-          localStorage.removeItem("redirectAfterLogin");
+            sessionStorage.getItem("redirectAfterLogin") || "/profile";
+          sessionStorage.removeItem("redirectAfterLogin");
           this.$router.replace(target);
         })
         .catch((error) => {

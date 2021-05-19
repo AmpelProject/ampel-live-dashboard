@@ -67,6 +67,12 @@
                         ><b-icon-arrow-repeat></b-icon-arrow-repeat
                       ></b-button>
                       <b-button
+                        variant="danger"
+                        title="Delete token and log out"
+                        @click="logout"
+                        ><b-icon-x
+                      /></b-button>
+                      <b-button
                         variant="info"
                         title="Copy to clipboard"
                         v-clipboard="() => token"
@@ -143,6 +149,10 @@ export default {
     humanize(duration) {
       return toHHMMSS(duration / 1000);
     },
+    logout() {
+      this.loginRequested = false;
+      this.$store.commit("logout");
+    },
     login() {
       this.loginRequested = true;
       const client = axios.create({
@@ -151,7 +161,7 @@ export default {
       axiosRetry(client, { retryDelay: axiosRetry.exponentialDelay });
       client.get("/auth/login").then((response) => {
         // Use state to validate redirect from auth provider
-        localStorage.setItem("redirectState", response.data.params.state);
+        sessionStorage.setItem("redirectState", response.data.params.state);
         window.location = response.data.url;
       });
     },
