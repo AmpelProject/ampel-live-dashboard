@@ -9,6 +9,9 @@
           :totalRows="totalRows"
           :per-page="perPage"
         ></b-pagination>
+        <b-button @click.prevent="forceDownload()">
+          <b-icon-download />
+        </b-button>
         <b-button
           v-b-toggle.filter-panel
           variant="primary"
@@ -111,7 +114,7 @@
 import Vue from "vue";
 import { BvTableCtxObject } from "bootstrap-vue";
 import { formatDate } from "@/lib/utils";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import qs from "qs";
 
 export default Vue.extend({
@@ -221,6 +224,18 @@ export default Vue.extend({
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+    forceDownload() {
+      this.$store.state.api_client
+        .get("/live/events/" + this.run_id + "/logs", { responseType: "blob" })
+        .then((response: AxiosResponse) => {
+          const blob = new Blob([response.data], { type: "application/json" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `${this.run_id}.json`;
+          link.click();
+          URL.revokeObjectURL(link.href);
         });
     },
   },
