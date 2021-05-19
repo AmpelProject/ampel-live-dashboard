@@ -1,12 +1,6 @@
 import Vue from "vue";
 import { mapState } from "vuex";
-import axios, { AxiosResponse } from "axios";
-import qs from "qs";
-import {
-  validateRelativism,
-  parseRelativism,
-  buildDate,
-} from "@/lib/relativism";
+import { AxiosResponse } from "axios";
 
 export default Vue.extend({
   props: {
