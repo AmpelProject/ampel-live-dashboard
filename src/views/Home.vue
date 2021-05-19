@@ -31,7 +31,7 @@
                   variant="secondary"
                   class="mr-1"
                   :to="{
-                    name: 'Events',
+                    name: 'Runs',
                     params: { process: summary.process },
                   }"
                   v-b-tooltip.hover
