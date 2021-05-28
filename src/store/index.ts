@@ -64,7 +64,6 @@ const getToken = function (store: any) {
   if (token) {
     try {
       const content: TokenPayload = jwt_decode(token);
-      console.log(content.exp, Date.now() / 1000);
       if (!(content.exp < Date.now() / 1000)) {
         store.commit("login", token);
       } else {
