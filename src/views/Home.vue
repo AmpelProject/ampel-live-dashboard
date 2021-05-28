@@ -2,18 +2,6 @@
   <div class="home">
     <b-container class="mt-3">
       <b-card-group deck>
-        <b-card header="Channels"
-          ><b-list-group>
-            <b-list-group-item
-              v-for="channel in channels"
-              :key="channel.channel"
-              :to="{ name: 'Channel', params: { id: channel.channel } }"
-              v-b-tooltip.hover
-              title="Click to view channel configuration"
-              >{{ channel.channel }}
-            </b-list-group-item></b-list-group
-          >
-        </b-card>
         <b-card header="Processes">
           <b-list-group>
             <b-list-group-item
@@ -51,6 +39,18 @@
                   >{{ summary.failures }}</b-badge
                 ></span
               >
+            </b-list-group-item></b-list-group
+          >
+        </b-card>
+        <b-card header="Channels"
+          ><b-list-group>
+            <b-list-group-item
+              v-for="channel in channels"
+              :key="channel.channel"
+              :to="{ name: 'Channel', params: { id: channel.channel } }"
+              v-b-tooltip.hover
+              title="Click to view channel configuration"
+              >{{ channel.channel }}
             </b-list-group-item></b-list-group
           >
         </b-card>
