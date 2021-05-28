@@ -10,6 +10,11 @@ import {
   ListGroupPlugin,
   SidebarPlugin,
   BadgePlugin,
+  FormGroupPlugin,
+  FormInputPlugin,
+  InputGroupPlugin,
+  ButtonPlugin,
+  LayoutPlugin,
   BIcon,
   BIconClockHistory,
   BIconCheck,
@@ -38,6 +43,11 @@ Vue.use(CardPlugin);
 Vue.use(ListGroupPlugin);
 Vue.use(SidebarPlugin);
 Vue.use(BadgePlugin);
+Vue.use(FormGroupPlugin);
+Vue.use(FormInputPlugin);
+Vue.use(InputGroupPlugin);
+Vue.use(ButtonPlugin);
+Vue.use(LayoutPlugin);
 
 // icons
 Vue.component("BIcon", BIcon);
