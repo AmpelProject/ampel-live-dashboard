@@ -114,8 +114,7 @@
 import Vue from "vue";
 import { BvTableCtxObject } from "bootstrap-vue";
 import { formatDate } from "@/lib/utils";
-import axios, { AxiosResponse } from "axios";
-import qs from "qs";
+import { AxiosResponse } from "axios";
 
 export default Vue.extend({
   name: "ProcessLogs",
@@ -175,54 +174,33 @@ export default Vue.extend({
       return flags;
     },
     loadData(ctx: BvTableCtxObject, callback: Function): void {
-      axios
-        .get(
-          this.$store.state.BACKEND_URL +
-            "/live/events/" +
-            this.run_id +
-            "/logs",
-          {
-            headers: { Authorization: "bearer ${this.$store.state.token}" },
-            params: {
-              skip: (ctx.currentPage - 1) * ctx.perPage,
-              limit: ctx.perPage,
-              // @ts-ignore
-              filter: ctx.filter.message,
-              flags: this.getLogFlags(),
-            },
-            paramsSerializer: function (params) {
-              return qs.stringify(params, { arrayFormat: "repeat" });
-            },
-          }
-        )
-        .then((response) => {
+      this.$store.state.api_client
+        .get("/live/events/" + this.run_id + "/logs", {
+          params: {
+            skip: (ctx.currentPage - 1) * ctx.perPage,
+            limit: ctx.perPage,
+            // @ts-ignore
+            filter: ctx.filter.message,
+            flags: this.getLogFlags(),
+          },
+        })
+        .then((response: AxiosResponse) => {
           callback(response.data.logs);
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.log(error);
           callback([]);
         });
     },
     countRows(): void {
-      axios
-        .get(
-          this.$store.state.BACKEND_URL +
-            "/live/events/" +
-            this.run_id +
-            "/logs/count",
-
-          {
-            headers: { Authorization: "bearer ${this.$store.state.token}" },
-            params: { filter: this.filter.message, flags: this.getLogFlags() },
-            paramsSerializer: function (params) {
-              return qs.stringify(params, { arrayFormat: "repeat" });
-            },
-          }
-        )
-        .then((response) => {
+      this.$store.state.api_client
+        .get("/live/events/" + this.run_id + "/logs/count", {
+          params: { filter: this.filter.message, flags: this.getLogFlags() },
+        })
+        .then((response: AxiosResponse) => {
           this.totalRows = response.data.length;
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.log(error);
         });
     },
