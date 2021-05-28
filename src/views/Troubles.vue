@@ -19,12 +19,20 @@
 
         <p class="mb-1">{{ doc._exc_content.message }}</p>
 
-        <small
-          ><router-link
-            :to="{ name: 'Process', params: { id: doc.process } }"
-            >{{ doc.process }}</router-link
-          ></small
-        >
+        <div class="d-flex w-100 justify-content-between">
+          <small v-if="doc.process"
+            ><router-link
+              :to="{ name: 'Process', params: { id: doc.process } }"
+              >{{ doc.process }}</router-link
+            ></small
+          >
+          <small v-if="doc.channel"
+            ><router-link
+              :to="{ name: 'Channel', params: { id: doc.channel } }"
+              >{{ doc.channel }}</router-link
+            ></small
+          >
+        </div>
       </b-list-group-item>
     </b-list-group>
   </div>
