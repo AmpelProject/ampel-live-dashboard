@@ -85,35 +85,9 @@
             </b-col>
           </b-row>
 
-          <b-row
-            class="mt-1"
-            v-b-tooltip.hover
-            title="These are your identities. You have access to any Ampel channel that your username, one of your organizations, or one of your teams as a member."
-          >
+          <b-row class="mt-1">
             <b-col>
-              <b-card-group deck>
-                <b-card header="User">{{ user }}</b-card>
-                <b-card header="Organizations">
-                  <b-list-group>
-                    <b-list-group-item
-                      v-for="org in $store.state.token_payload.orgs"
-                      :key="org"
-                    >
-                      {{ org }}
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-card>
-                <b-card text-left header="Teams">
-                  <b-list-group>
-                    <b-list-group-item
-                      v-for="team in $store.state.token_payload.teams"
-                      :key="team"
-                    >
-                      {{ team }}
-                    </b-list-group-item>
-                  </b-list-group>
-                </b-card>
-              </b-card-group>
+              <token-identities />
             </b-col>
           </b-row>
         </b-container>
@@ -127,8 +101,13 @@ import { toHHMMSS } from "@/lib/utils";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
+import TokenIdentities from "@/components/TokenIdentities.vue";
+
 export default {
   name: "Profile",
+  components: {
+    TokenIdentities,
+  },
   data() {
     return {
       loginRequested: false,
@@ -137,9 +116,6 @@ export default {
   computed: {
     token() {
       return this.$store.state.token;
-    },
-    user() {
-      return this.$store.state.token_payload.name;
     },
     expire() {
       return new Date(this.$store.state.token_payload.exp * 1000);
