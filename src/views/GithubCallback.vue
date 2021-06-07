@@ -60,7 +60,7 @@ export default {
 
       const path = "/auth/authorize";
       const client = axios.create({
-        baseURL: this.$store.state.BACKEND_AUTH_URL,
+        baseURL: process.env.VUE_APP_BACKEND_AUTH_URL,
       });
       axiosRetry(client, {
         retryDelay: axiosRetry.exponentialDelay,

@@ -16,8 +16,6 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    BACKEND_AUTH_URL: "https://ampel.zeuthen.desy.de/api",
-    BACKEND_URL: "https://ampel.zeuthen.desy.de/api",
     token: undefined,
     token_payload: undefined,
     api_client: undefined as AxiosInstance | undefined,
@@ -33,7 +31,7 @@ const store = new Vuex.Store({
       state.token = access_token;
       state.token_payload = jwt_decode(access_token);
       state.api_client = axios.create({
-        baseURL: state.BACKEND_URL,
+        baseURL: process.env.VUE_APP_BACKEND_URL,
         headers: { Authorization: `bearer ${state.token}` },
         paramsSerializer: function (params: Object) {
           return qs.stringify(params, { arrayFormat: "repeat" });

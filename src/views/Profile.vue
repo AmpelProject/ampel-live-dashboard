@@ -132,7 +132,7 @@ export default {
     login() {
       this.loginRequested = true;
       const client = axios.create({
-        baseURL: this.$store.state.BACKEND_AUTH_URL,
+        baseURL: process.env.VUE_APP_BACKEND_AUTH_URL,
       });
       axiosRetry(client, { retryDelay: axiosRetry.exponentialDelay });
       client.get("/auth/login").then((response) => {
