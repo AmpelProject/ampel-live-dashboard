@@ -10,6 +10,7 @@ import {
   ListGroupPlugin,
   SidebarPlugin,
   BadgePlugin,
+  FormPlugin,
   FormGroupPlugin,
   FormInputPlugin,
   InputGroupPlugin,
@@ -45,6 +46,7 @@ Vue.use(CardPlugin);
 Vue.use(ListGroupPlugin);
 Vue.use(SidebarPlugin);
 Vue.use(BadgePlugin);
+Vue.use(FormPlugin);
 Vue.use(FormGroupPlugin);
 Vue.use(FormInputPlugin);
 Vue.use(InputGroupPlugin);
