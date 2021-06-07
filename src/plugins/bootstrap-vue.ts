@@ -15,9 +15,11 @@ import {
   FormInputPlugin,
   InputGroupPlugin,
   ButtonPlugin,
+  ButtonGroupPlugin,
   LayoutPlugin,
   AspectPlugin,
   TooltipPlugin,
+  TabsPlugin,
   BIcon,
   BIconClockHistory,
   BIconCheck,
@@ -51,9 +53,11 @@ Vue.use(FormGroupPlugin);
 Vue.use(FormInputPlugin);
 Vue.use(InputGroupPlugin);
 Vue.use(ButtonPlugin);
+Vue.use(ButtonGroupPlugin);
 Vue.use(LayoutPlugin);
 Vue.use(AspectPlugin);
 Vue.use(TooltipPlugin);
+Vue.use(TabsPlugin);
 
 // icons
 Vue.component("BIcon", BIcon);

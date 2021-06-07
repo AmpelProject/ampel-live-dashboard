@@ -87,7 +87,14 @@
 
           <b-row class="mt-1">
             <b-col>
-              <token-identities />
+              <!-- <b-card no-body> -->
+              <b-tabs>
+                <div class="mt-2">
+                  <b-tab lazy title="Identities"> <token-identities /></b-tab>
+                  <b-tab lazy title="Archive tokens"> <archive-tokens /></b-tab>
+                </div>
+              </b-tabs>
+              <!-- </b-card> -->
             </b-col>
           </b-row>
         </b-container>
@@ -102,11 +109,13 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 
 import TokenIdentities from "@/components/TokenIdentities.vue";
+import ArchiveTokens from "@/components/ArchiveTokens.vue";
 
 export default {
   name: "Profile",
   components: {
     TokenIdentities,
+    ArchiveTokens,
   },
   data() {
     return {

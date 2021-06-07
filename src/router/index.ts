@@ -12,7 +12,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/profile",
+    path: "/tokens",
     name: "Profile",
     meta: {
       authRoute: true,

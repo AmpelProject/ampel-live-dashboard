@@ -2,7 +2,7 @@
   <b-card-group
     deck
     v-b-tooltip.hover
-    title="These are your identities. You have access to any Ampel channel that your username, one of your organizations, or one of your teams as a member."
+    title="These are the identities associated with your API token. You have access to any Ampel channel that your username, one of your organizations, or one of your teams as a member."
   >
     <b-card header="User">{{ this.$store.state.token_payload.name }}</b-card>
     <b-card header="Organizations">
