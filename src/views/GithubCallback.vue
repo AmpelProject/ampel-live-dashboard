@@ -76,7 +76,7 @@ export default {
         .then((response) => {
           this.$store.commit("login", response.data.access_token);
           const target =
-            sessionStorage.getItem("redirectAfterLogin") || "/profile";
+            sessionStorage.getItem("redirectAfterLogin") || "/tokens";
           sessionStorage.removeItem("redirectAfterLogin");
           this.$router.replace(target);
         })
