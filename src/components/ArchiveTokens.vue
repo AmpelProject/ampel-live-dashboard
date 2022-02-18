@@ -9,7 +9,13 @@
         :key="token.token_id"
         class="d-flex align-items-center justify-content-between"
       >
-        <span class="abbrev">{{ token.token }}</span>
+        <span class="abbrev"
+          >{{ token.token }}
+          <b-badge class="ml-1" variant="secondary">{{ token.role }}</b-badge>
+          <b-badge class="ml-1" variant="secondary">{{
+            token.partnership ? "partnership" : "public"
+          }}</b-badge></span
+        >
         <b-button-group>
           <b-button
             variant="danger"
