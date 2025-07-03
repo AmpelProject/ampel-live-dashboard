@@ -81,10 +81,18 @@ export default {
           this.$router.replace(target);
         })
         .catch((error) => {
-          this.error = {
-            error: error.name,
-            error_description: client.baseURL + path + " " + error.message,
-          };
+          if (error.response.code === 401) {
+            this.error = {
+              error: error.response.name,
+              error_description:
+                "You are not authorized to access this resource. Please contact ampel-info@desy.de to resolve this issue.",
+            };
+          } else {
+            this.error = {
+              error: error.name,
+              error_description: client.baseURL + path + " " + error.message,
+            };
+          }
         });
     },
   },
