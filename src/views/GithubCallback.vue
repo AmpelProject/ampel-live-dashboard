@@ -81,9 +81,9 @@ export default {
           this.$router.replace(target);
         })
         .catch((error) => {
-          if (error.response.code === 401) {
+          if (error.response.status === 401) {
             this.error = {
-              error: error.response.name,
+              error: `${error.response.status} ${error.response.statusText}`,
               error_description:
                 "You are not authorized to access this resource. Please contact ampel-info@desy.de to resolve this issue.",
             };
